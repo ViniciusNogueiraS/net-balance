@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DateTimePicker from 'react-datetime-picker';
 import CurrencyInput from 'react-currency-input-field';
 import { IPeriod } from './Context';
@@ -26,6 +26,18 @@ function Balance({period}: Props) {
   const [entries, setEntries] = useState<IEntry[]>([]);
   const [editing, setEditing] = useState<string>("");
   const [editEntry, setEditEntry] = useState<IEntry | null>(null);
+
+  useEffect(() => {
+    if (period) {
+      let arr = entries.filter(e => {
+        if (e.date && period.init && period.end) {
+          return e.date >= period.init && e.date <= period.end;
+        }
+      });
+
+      setEntries(arr);
+    }
+  }, [period])
 
   function addEntry(index: number) {
     if (!editEntry) return;
