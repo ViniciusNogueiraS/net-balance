@@ -1,1 +1,1 @@
-declare module 'react-modern-datepicker';
+declare module 'react-datetime-picker';

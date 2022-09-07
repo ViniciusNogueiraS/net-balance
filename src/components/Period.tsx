@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import DateTimePicker from 'react-datetime-picker';
 import { IPeriod } from './Context';
-import ModernDatepicker from 'react-modern-datepicker';
 
 interface Props {
   period: IPeriod | null,
@@ -9,7 +9,7 @@ interface Props {
 
 function Period({period, setPeriod}: Props) {
 
-  const [togglePeriod, setTogglePeriod] = useState("Period");
+  const [togglePeriod, setTogglePeriod] = useState("Today");
 
   useEffect(() => {
 
@@ -25,35 +25,47 @@ function Period({period, setPeriod}: Props) {
   return (
     <div className="Period">
       <div>
-        <label>Period
-          <input type="radio" name="Period" onChange={() => setTogglePeriod("Period")} value="Period"/>
+        <label>Periodo
+          <input
+            type="radio"
+            name="Period"
+            onChange={() => setTogglePeriod("Period")}
+            value="Period"/>
         </label>
-        <label>Today
-          <input type="radio" name="Period" onChange={() => setTogglePeriod("Today")} value="Today"/>
+        <label>Hoje
+          <input
+            type="radio"
+            checked={togglePeriod === "Today"}
+            name="Period" onChange={() => setTogglePeriod("Today")}
+            value="Today"/>
         </label>
       </div>
 
       <div>
         {togglePeriod === "Period" ? (
           <>
-            <ModernDatepicker
-              date={period?.init}
-              format={'DD-MM-YYYY'}
-              showBorder
-              onChange={(date: Date | null) => setPeriod({init: date, end: period?.end})}
-              placeholder={'Select a date to Init'}
-            />
-            <ModernDatepicker
-              date={period?.end}
-              format={'DD-MM-YYYY'}
-              showBorder
-              onChange={(date: Date | null) => setPeriod({init: period?.init, end: date})}
-              placeholder={'Select a date to End'}
-            />
+            <label>Início
+              <DateTimePicker
+                onChange={(date: Date | null) => setPeriod({init: date, end: period?.end})}
+                value={period?.init}
+                disableClock={true}
+                format={"dd/MM/y"}
+                clearIcon={null}
+                maxDate={period?.end}
+              />
+            </label>
+            <label>Fim
+              <DateTimePicker
+                onChange={(date: Date | null) => setPeriod({init: period?.init, end: date})}
+                value={period?.end}
+                disableClock={true}
+                format={"dd/MM/y"}
+                clearIcon={null}
+                minDate={period?.init}
+              />
+            </label>
           </>
-        ) : (
-          <span></span>
-        )}
+        ) : <></>}
       </div>
 
     </div>

@@ -21,8 +21,8 @@ function Context() {
 
   return (
     <div className="Context">
-      <Balance period={period}/>
       <Period period={period} setPeriod={setPeriod}/>
+      <Balance period={period}/>
     </div>
   );
 }
