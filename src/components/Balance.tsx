@@ -1,21 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import DateTimePicker from 'react-datetime-picker';
 import CurrencyInput from 'react-currency-input-field';
-import { IPeriod } from './Context';
 import uuid from 'react-uuid';
 
-enum Type {
-  ENTRADA = 'Entrada',
-  SAIDA = 'Saida'
-}
-
-interface IEntry {
-  id: string,
-  date: Date | null,
-  description: string,
-  type: Type,
-  value: string
-}
+import { IEntry, IPeriod } from '../types/interfaces';
+import { Type } from '../types/enums';
+import Persist from '../services/Persist';
 
 interface Props {
   period: IPeriod | null
@@ -23,21 +13,25 @@ interface Props {
 
 function Balance({period}: Props) {
 
-  const [entries, setEntries] = useState<IEntry[]>([]);
+  const persistance = new Persist(true);
+
+  const [entries, setEntries] = useState<IEntry[]>(persistance.getEntries() || []);
   const [editing, setEditing] = useState<string>("");
   const [editEntry, setEditEntry] = useState<IEntry | null>(null);
 
   useEffect(() => {
     if (period) {
+      console.log(period, entries)
       let arr = entries.filter(e => {
         if (e.date && period.init && period.end) {
+          console.log(e.date, period.init, period.end)
           return e.date >= period.init && e.date <= period.end;
         }
       });
-
+      console.log(arr, '00000000000000000000000')
       setEntries(arr);
     }
-  }, [period])
+  }, [period]);
 
   function addEntry(index: number) {
     if (!editEntry) return;
@@ -48,6 +42,7 @@ function Balance({period}: Props) {
     setEntries(arr);
     setEditEntry(null);
     setEditing("");
+    persistance.addEntry(editEntry);
   }
 
   function removeEntry(id: string) {
@@ -56,6 +51,7 @@ function Balance({period}: Props) {
 
     let arr = entries.filter(e => e.id !== id);
     setEntries(arr);
+    persistance.removeEntry(id);
   }
 
   function changeEntry(id: string) {

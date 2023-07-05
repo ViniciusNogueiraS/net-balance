@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import DateTimePicker from 'react-datetime-picker';
-import { IPeriod } from './Context';
+
+import { IPeriod } from '../types/interfaces';
+
 
 interface Props {
   period: IPeriod | null,

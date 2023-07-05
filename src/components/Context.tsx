@@ -2,17 +2,7 @@ import React, { useState } from 'react';
 import Balance from './Balance';
 import Period from './Period';
 
-interface IUser {
-  id: string,
-  email: string,
-  password: string,
-  nickname: string
-}
-
-export interface IPeriod {
-  init: Date | null,
-  end: Date | null
-}
+import { IPeriod, IUser } from '../types/interfaces';
 
 function Context() {
 
