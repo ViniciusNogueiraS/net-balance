@@ -16,9 +16,15 @@ function Period({period, setPeriod}: Props) {
   useEffect(() => {
 
     if (togglePeriod === "Today") {
+
+      let init = new Date();
+      let end = new Date();
+      init.setHours(0, 0, 0, 0);
+      end.setHours(0, 0, 0, 0);
+
       setPeriod({
-        init: new Date(),
-        end: new Date()
+        init,
+        end
       });
     }
 
@@ -51,7 +57,7 @@ function Period({period, setPeriod}: Props) {
                 onChange={(date: Date | null) => setPeriod({init: date, end: period?.end})}
                 value={period?.init}
                 disableClock={true}
-                format={"dd/MM/y"}
+                format={"dd/MM/yyyy"}
                 clearIcon={null}
                 maxDate={period?.end}
               />
@@ -61,7 +67,7 @@ function Period({period, setPeriod}: Props) {
                 onChange={(date: Date | null) => setPeriod({init: period?.init, end: date})}
                 value={period?.end}
                 disableClock={true}
-                format={"dd/MM/y"}
+                format={"dd/MM/yyyy"}
                 clearIcon={null}
                 minDate={period?.init}
               />

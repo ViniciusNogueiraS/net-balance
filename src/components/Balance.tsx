@@ -21,14 +21,18 @@ function Balance({period}: Props) {
 
   useEffect(() => {
     if (period) {
-      console.log(period, entries)
-      let arr = entries.filter(e => {
+
+      let arr = persistance.getEntries() || [];
+      arr = arr.filter(e => {
         if (e.date && period.init && period.end) {
-          console.log(e.date, period.init, period.end)
-          return e.date >= period.init && e.date <= period.end;
-        }
+          let dateEntry = e.date.getTime();
+          let periodInit = period.init.getTime();
+          let periodEnd = period.end.getTime();
+
+          return (dateEntry >= periodInit && dateEntry <= periodEnd);
+        }else return false;
       });
-      console.log(arr, '00000000000000000000000')
+
       setEntries(arr);
     }
   }, [period]);
@@ -64,9 +68,12 @@ function Balance({period}: Props) {
   function newEntry() {
     if (editEntry) return;
 
+    let date = new Date();
+    date.setHours(0, 0, 0, 0);
+
     let entry: IEntry = {
       id: uuid(),
-      date: new Date(),
+      date,
       description: "",
       type: Type.ENTRADA,
       value: "R$ 0.00"
@@ -109,7 +116,7 @@ function Balance({period}: Props) {
                       <DateTimePicker
                         onChange={(date: Date | null) => setEditEntry({...editEntry, date})}
                         value={editEntry.date}
-                        format={"dd/MM/y h:mm:ss"}
+                        format={"dd/MM/yyyy"}
                         clearIcon={null}
                       />
                     </td>
@@ -130,8 +137,8 @@ function Balance({period}: Props) {
                           }
                         )}
                       >
-                        <option selected value={Type.ENTRADA}>Entrada</option>
-                        <option value={Type.SAIDA}>Saída</option>
+                        <option selected={editEntry.type === Type.ENTRADA ? true : false} value={Type.ENTRADA}>Entrada</option>
+                        <option selected={editEntry.type === Type.SAIDA ? true : false} value={Type.SAIDA}>Saída</option>
                       </select>
                     </td>
                     <td>
@@ -161,44 +168,18 @@ function Balance({period}: Props) {
                       disabled
                       onChange={(date: Date | null) => setEditEntry({...entry, date})}
                       value={entry.date}
-                      format={"dd/MM/y h:mm:ss"}
+                      format={"dd/MM/yyyy"}
                       clearIcon={null}
                     />
                   </td>
                   <td>
-                    <input
-                      disabled
-                      type="text"
-                      onChange={(e) => setEditEntry({...entry, description: e.target.value})}
-                      value={entry.description}
-                    />
+                    {entry.description}
                   </td>
                   <td>
-                    <select
-                      disabled
-                      onChange={(e) => setEditEntry(
-                        {
-                          ...entry,
-                          type: (e.target.selectedIndex === 0 ? Type.ENTRADA : Type.SAIDA)
-                        }
-                      )}
-                    >
-                      <option selected value={Type.ENTRADA}>Entrada</option>
-                      <option value={Type.SAIDA}>Saída</option>
-                    </select>
+                    {entry.type}
                   </td>
                   <td>
-                    <CurrencyInput
-                      disabled
-                      placeholder={"Valor"}
-                      defaultValue={0.00}
-                      decimalsLimit={2}
-                      decimalScale={2}
-                      prefix={"R$ "}
-                      decimalSeparator={","}
-                      groupSeparator={"."}
-                      onValueChange={(value) => setEditEntry({...entry, value: value || "0.00"})}
-                    />
+                    R$ {entry.value}
                   </td>
                   <td>
                     <button onClick={() => changeEntry(entry.id)}>Editar</button>

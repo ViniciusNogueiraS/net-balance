@@ -11,19 +11,18 @@ class Persist {
 
     parse() {
         let obj = JSON.parse(window.localStorage.getItem('net-balance-storage') || '');
-        obj.registers.map((e: any) => {
+        obj.registers = obj.registers.map((e: any) => {
             return {
-                date: new Date(e.date),
-                ...e
+                ...e,
+                date: new Date(e.date)
             }
         });
-        obj.plans.map((e: any) => {
+        obj.plans = obj.plans.map((e: any) => {
             return {
-                date: new Date(e.date),
-                ...e
+                ...e,
+                date: new Date(e.date)
             }
         });
-        console.log(obj.registers)
         return obj;
     }
     
