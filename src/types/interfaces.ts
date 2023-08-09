@@ -20,7 +20,12 @@ export interface IEntry {
     value: string
 }
 
+export interface IWallet {
+    id: string,
+    name: string,
+    registers: IEntry[]
+}
+
 export interface IStorage {
-    registers: IEntry[],
-    plans: IEntry[]
+    wallets: IWallet[]
 }

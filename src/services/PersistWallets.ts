@@ -1,26 +1,25 @@
-import { IEntry, IStorage } from "../types/interfaces";
+import { IStorage, IWallet } from "../types/interfaces";
 
-class Persist {
+class PersistWallets {
 
-    local: boolean
+    local: boolean;
 	
 	constructor(local: boolean) {
 		this.local = local;
         this.prepareStorage();
 	}
 
-    parse() {
+    parse(): IStorage {
         let obj = JSON.parse(window.localStorage.getItem('net-balance-storage') || '');
-        obj.registers = obj.registers.map((e: any) => {
+        obj.wallets = obj.wallets.map((w: IWallet) => {
             return {
-                ...e,
-                date: new Date(e.date)
-            }
-        });
-        obj.plans = obj.plans.map((e: any) => {
-            return {
-                ...e,
-                date: new Date(e.date)
+                ...w,
+                registers: w.registers.map(r => {
+                    return {
+                        ...r,
+                        date: (r.date ? new Date(r.date) : new Date())
+                    }
+                })
             }
         });
         return obj;
@@ -33,28 +32,27 @@ class Persist {
             if (existStorage) return;
     
             const storage: IStorage = {
-                registers: [],
-                plans: []
+                wallets: []
             }
     
             window.localStorage.setItem('net-balance-storage', JSON.stringify(storage));
         }
     }
 
-    getEntries() {
+    getWallets() {
         if (this.local) {
             let storage: IStorage = this.parse();
             
-            return storage.registers;
+            return storage.wallets;
         }else {
 
         }
     }
 
-    addEntry(entry: IEntry) {
+    addWallet(wallet: IWallet) {
         if (this.local) {
             let storage: IStorage = this.parse();
-            storage.registers.push(entry);
+            storage.wallets.push(wallet);
 
             window.localStorage.setItem('net-balance-storage', JSON.stringify(storage));
         }else {
@@ -62,10 +60,10 @@ class Persist {
         }
     }
 
-    removeEntry(id: string) {
+    removeWallet(id: string) {
         if (this.local) {
             let storage: IStorage = this.parse();
-            storage.registers = storage.registers.filter(e => e.id !== id);
+            storage.wallets = storage.wallets.filter(w => w.id !== id);
 
             window.localStorage.setItem('net-balance-storage', JSON.stringify(storage));
         }else {
@@ -73,11 +71,11 @@ class Persist {
         }
     }
 
-    changeEntry(entry: IEntry) {
+    changeWalletName(id: string, name: string) {
         if (this.local) {
             let storage: IStorage = this.parse();
-            let i = storage.registers.indexOf(entry);
-            storage.registers[i] = entry;
+            let index = storage.wallets.findIndex(w => w.id === id);
+            storage.wallets[index].name = name;
 
             window.localStorage.setItem('net-balance-storage', JSON.stringify(storage));
         }else {
@@ -86,4 +84,4 @@ class Persist {
     }
 }
 
-export default Persist;
+export default PersistWallets;

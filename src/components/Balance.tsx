@@ -5,48 +5,74 @@ import uuid from 'react-uuid';
 
 import { IEntry, IPeriod } from '../types/interfaces';
 import { Type } from '../types/enums';
-import Persist from '../services/Persist';
+import sumEntriesBefore from '../utils/sumEntriesBefore';
+import sumEntriesBetween from '../utils/sumEntriesBetween';
+import currencyBRL from '../utils/BRLcurrencyFormatter';
+import PersistEntries from '../services/PersistEntries';
 
 interface Props {
-  period: IPeriod | null
+  period: IPeriod | null,
+  walletId: string
 }
 
-function Balance({period}: Props) {
+function Balance({period, walletId}: Props) {
 
-  const persistance = new Persist(true);
+  const persistance = new PersistEntries(true, walletId);
+
+  const [prevBalance, setPrevBalance] = useState(0);
+  const [currBalance, setCurrBalance] = useState(0);
 
   const [entries, setEntries] = useState<IEntry[]>(persistance.getEntries() || []);
   const [editing, setEditing] = useState<string>("");
-  const [editEntry, setEditEntry] = useState<IEntry | null>(null);
+  const [editEntry, setEditEntry] = useState<IEntry | null>(null);  
 
   useEffect(() => {
     if (period) {
-
-      let arr = persistance.getEntries() || [];
-      arr = arr.filter(e => {
-        if (e.date && period.init && period.end) {
-          let dateEntry = e.date.getTime();
-          let periodInit = period.init.getTime();
-          let periodEnd = period.end.getTime();
-
-          return (dateEntry >= periodInit && dateEntry <= periodEnd);
-        }else return false;
-      });
-
-      setEntries(arr);
+      loadEntries(period);
+      loadBalances(period);
     }
   }, [period]);
 
-  function addEntry(index: number) {
-    if (!editEntry) return;
-    
-    let arr = entries;
-    arr[index] = editEntry;
+  useEffect(() => {
+    if (period) loadBalances(period);
+  }, [editing]);
+
+  function loadBalances(period: IPeriod) {
+
+    let sumBefP = sumEntriesBefore(persistance, period, Type.ENTRADA);
+    let sumBefN = sumEntriesBefore(persistance, period, Type.SAIDA);
+    setPrevBalance(sumBefP - sumBefN);
+
+    let sumBetP = sumEntriesBetween(persistance, period, Type.ENTRADA);
+    let sumBetN = sumEntriesBetween(persistance, period, Type.SAIDA);
+    setCurrBalance((sumBefP - sumBefN) + (sumBetP - sumBetN));
+  }
+
+  function loadEntries(period: IPeriod) {
+
+    let arr = persistance.getEntries() || [];
+    arr = arr.filter(e => {
+      if (e.date && period.init && period.end) {
+        let dateEntry = e.date.getTime();
+        let periodInit = period.init.getTime();
+        let periodEnd = period.end.getTime();
+
+        return (dateEntry >= periodInit && dateEntry <= periodEnd);
+      }else return false;
+    });
 
     setEntries(arr);
+  }
+
+  function addEntry(id: string) {
+    if (!editEntry) return;
+
+    if (persistance.getEntrieById(editEntry.id)) persistance.changeEntry(editEntry);
+    else persistance.addEntry(editEntry);
+
     setEditEntry(null);
     setEditing("");
-    persistance.addEntry(editEntry);
+    if (period) loadEntries(period);
   }
 
   function removeEntry(id: string) {
@@ -55,6 +81,7 @@ function Balance({period}: Props) {
 
     let arr = entries.filter(e => e.id !== id);
     setEntries(arr);
+
     persistance.removeEntry(id);
   }
 
@@ -76,7 +103,7 @@ function Balance({period}: Props) {
       date,
       description: "",
       type: Type.ENTRADA,
-      value: "R$ 0.00"
+      value: "0.00"
     }
 
     let arr = entries;
@@ -91,6 +118,9 @@ function Balance({period}: Props) {
     <div className="Balance">
       <table border={1}>
         <thead>
+          <tr>
+            <td colSpan={4}>Saldo Anterior: {currencyBRL.format(prevBalance)}</td>
+          </tr>
           <tr>
             <td>
               Data e Hora
@@ -107,7 +137,13 @@ function Balance({period}: Props) {
           </tr>
         </thead>
         <tbody>
-          {entries.map((entry, index) => {
+          {entries.sort((a, b) => {
+
+            if (a.date && b.date) {
+              return a.date.getTime() - b.date.getTime();
+            }else return -1;
+
+          }).map((entry) => {
             if (editing === entry.id) {
               if (editEntry) {
                 return (
@@ -145,16 +181,18 @@ function Balance({period}: Props) {
                       <CurrencyInput
                         placeholder={"Valor"}
                         defaultValue={0.00}
-                        decimalsLimit={2}
                         decimalScale={2}
+                        decimalsLimit={2}
+                        decimalSeparator=","
+                        groupSeparator="."
+                        step={0.01}
                         prefix={"R$ "}
-                        decimalSeparator={","}
-                        groupSeparator={"."}
                         onValueChange={(value) => setEditEntry({...editEntry, value: value || "0.00"})}
+                        value={editEntry.value}
                       />
                     </td>
                     <td>
-                      <button onClick={() => addEntry(index)}>OK</button>
+                      <button disabled={parseFloat(editEntry.value) <= 0} onClick={() => addEntry(editEntry.id)}>OK</button>
                       <button onClick={() => removeEntry(entry.id)}>Excluir</button>
                     </td>
                   </tr>
@@ -189,9 +227,12 @@ function Balance({period}: Props) {
             }
           })}
           <tr>
-            <td colSpan={4}>
+            <td colSpan={5}>
               <button onClick={newEntry}>Novo Lançamento</button>
             </td>
+          </tr>
+          <tr>
+            <td colSpan={4}>Saldo Atual: {currencyBRL.format(currBalance)}</td>
           </tr>
         </tbody>
       </table>
