@@ -116,27 +116,27 @@ function Balance({period, walletId}: Props) {
 
   return (
     <div className="Balance">
-      <table border={1}>
-        <thead>
-          <tr>
-            <td colSpan={4}>Saldo Anterior: {currencyBRL.format(prevBalance)}</td>
-          </tr>
-          <tr>
-            <td>
+      <div>
+        <p>Saldo Anterior: {currencyBRL.format(prevBalance)}</p>
+      </div>
+      <div className="Table">
+        <div className="TableHead">
+          <div className="Row">
+            <div className="Cell">
               Data e Hora
-            </td>
-            <td>
+            </div>
+            <div className="Cell">
               Descrição
-            </td>
-            <td>
+            </div>
+            <div className="Cell">
               Tipo
-            </td>
-            <td>
+            </div>
+            <div className="Cell">
               Valor
-            </td>
-          </tr>
-        </thead>
-        <tbody>
+            </div>
+          </div>
+        </div>
+        <div className="TableBody">
           {entries.sort((a, b) => {
 
             if (a.date && b.date) {
@@ -147,24 +147,24 @@ function Balance({period, walletId}: Props) {
             if (editing === entry.id) {
               if (editEntry) {
                 return (
-                  <tr key={editEntry.id}>
-                    <td>
+                  <div className="Row" key={editEntry.id}>
+                    <div className="Cell">
                       <DateTimePicker
                         onChange={(date: Date | null) => setEditEntry({...editEntry, date})}
                         value={editEntry.date}
                         format={"dd/MM/yyyy"}
                         clearIcon={null}
                       />
-                    </td>
-                    <td>
+                    </div>
+                    <div className="Cell">
                       <input
                         type="text"
                         placeholder="Descrição"
                         onChange={(e) => setEditEntry({...editEntry, description: e.target.value})}
                         value={editEntry.description}
                       />
-                    </td>
-                    <td>
+                    </div>
+                    <div className="Cell">
                       <select
                         onChange={(e) => setEditEntry(
                           {
@@ -176,8 +176,8 @@ function Balance({period, walletId}: Props) {
                         <option selected={editEntry.type === Type.ENTRADA ? true : false} value={Type.ENTRADA}>Entrada</option>
                         <option selected={editEntry.type === Type.SAIDA ? true : false} value={Type.SAIDA}>Saída</option>
                       </select>
-                    </td>
-                    <td>
+                    </div>
+                    <div className="Cell">
                       <CurrencyInput
                         placeholder={"Valor"}
                         defaultValue={0.00}
@@ -190,18 +190,18 @@ function Balance({period, walletId}: Props) {
                         onValueChange={(value) => setEditEntry({...editEntry, value: value || "0.00"})}
                         value={editEntry.value}
                       />
-                    </td>
-                    <td>
+                    </div>
+                    <div className="Cell">
                       <button disabled={parseFloat(editEntry.value) <= 0} onClick={() => addEntry(editEntry.id)}>OK</button>
                       <button onClick={() => removeEntry(entry.id)}>Excluir</button>
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
                 )
               }
             } else {
               return (
-                <tr key={entry.id}>
-                  <td>
+                <div className="Row" key={entry.id}>
+                  <div className="Cell">
                     <DateTimePicker
                       disabled
                       onChange={(date: Date | null) => setEditEntry({...entry, date})}
@@ -209,33 +209,33 @@ function Balance({period, walletId}: Props) {
                       format={"dd/MM/yyyy"}
                       clearIcon={null}
                     />
-                  </td>
-                  <td>
+                  </div>
+                  <div className="Cell">
                     {entry.description}
-                  </td>
-                  <td>
+                  </div>
+                  <div className="Cell">
                     {entry.type}
-                  </td>
-                  <td>
+                  </div>
+                  <div className="Cell">
                     R$ {entry.value}
-                  </td>
-                  <td>
+                  </div>
+                  <div className="Cell">
                     <button onClick={() => changeEntry(entry.id)}>Editar</button>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               )
             }
           })}
-          <tr>
-            <td colSpan={5}>
+          <div className="Row">
+            <div className="Cell">
               <button onClick={newEntry}>Novo Lançamento</button>
-            </td>
-          </tr>
-          <tr>
-            <td colSpan={4}>Saldo Atual: {currencyBRL.format(currBalance)}</td>
-          </tr>
-        </tbody>
-      </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p>Saldo Atual: {currencyBRL.format(currBalance)}</p>
+      </div>
     </div>
   );
 }

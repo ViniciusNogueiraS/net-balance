@@ -28,10 +28,12 @@ function Context() {
   return (
     <div className="Context">
       <Period period={period} setPeriod={setPeriod}/>
-      {wallets.map(wallet => (
-        <Wallet key={wallet.id} id={wallet.id} name={wallet.name} period={period} contextPersistance={contextPersistance}/>
-      ))}
-      <button onClick={newWallet}>
+      <div className="Wallets">
+        {wallets.map(wallet => (
+          <Wallet key={wallet.id} id={wallet.id} name={wallet.name} period={period} contextPersistance={contextPersistance}/>
+        ))}
+      </div>
+      <button className="NewWallet" onClick={newWallet}>
         Nova Carteira
       </button>
     </div>

@@ -1,0 +1,21 @@
+.Balance {
+
+}
+.Balance .Table {
+    width: 46rem;
+}
+
+.Balance .TableBody .Row:nth-child(even) {
+    background-color: #fdfdba;
+}
+.Balance .TableBody .Row:nth-child(odd) {
+    background-color: #ffffd6;
+}
+
+.Balance .Row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 2rem;
+    align-items: center;
+    justify-content: center;
+}
