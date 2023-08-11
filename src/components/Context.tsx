@@ -30,7 +30,14 @@ function Context() {
       <Period period={period} setPeriod={setPeriod}/>
       <div className="Wallets">
         {wallets.map(wallet => (
-          <Wallet key={wallet.id} id={wallet.id} name={wallet.name} period={period} contextPersistance={contextPersistance}/>
+          <Wallet
+            key={wallet.id}
+            id={wallet.id}
+            name={wallet.name}
+            period={period}
+            contextPersistance={contextPersistance}
+            updateWallets={() => setWallets(contextPersistance.getWallets() || [])}
+          />
         ))}
       </div>
       <button className="NewWallet" onClick={newWallet}>
