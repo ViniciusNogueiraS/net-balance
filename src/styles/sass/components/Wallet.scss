@@ -1,5 +1,31 @@
+
+
 .Wallet {
     display: flex;
     flex-direction: column;
     row-gap: 6px;
+    position: relative;
+    margin: 3rem 0;
+}
+.BackgroundOp {
+    position: absolute;
+    width: 120%;
+    left: -10%;
+    top: -3rem;
+    z-index: -1;
+}
+.BackgroundCl {
+    position: absolute;
+    width: auto;
+    height: 400px;
+    left: -1.5rem;
+    top: -3rem;
+    z-index: -1;
+}
+.Wallet .TopBar {
+    display: flex;
+    min-width: 30rem;
+}
+.Wallet .TopBar input {
+    width: 100%;
 }

@@ -1,8 +1,10 @@
 .Balance {
-
+    display: grid;
+    height: 292px;
+    grid-template-rows: 12% auto 12%;
 }
 .Balance .Table {
-    width: 46rem;
+    width: 56rem;
 }
 
 .Balance .TableBody .Row:nth-child(even) {
