@@ -23,6 +23,7 @@ export interface IEntry {
 export interface IWallet {
     id: string,
     name: string,
+    matiz: number,
     registers: IEntry[]
 }
 

@@ -1,26 +1,43 @@
-
-
 .Wallet {
     display: flex;
     flex-direction: column;
     row-gap: 6px;
+    height: 40px;
     position: relative;
-    margin: 3rem 0;
+    padding: 3rem 2rem;
+    transition: all ease-in .5s;
+
+    &:not(.Op):hover {
+        margin-left: 2rem;
+        height: 162px;
+    }
 }
+.Wallet.Op {
+    z-index: 1000;
+    height: 100%;
+    margin-bottom: 2rem;
+}
+
 .BackgroundOp {
     position: absolute;
     width: 120%;
     left: -10%;
-    top: -3rem;
+    top: 0;
     z-index: -1;
 }
 .BackgroundCl {
     position: absolute;
     width: auto;
     height: 400px;
-    left: -1.5rem;
-    top: -3rem;
+    left: 0;
+    top: 0;
     z-index: -1;
+
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 48px;
+    border-top-right-radius: 48px;
+    box-shadow: -18px 8px 17px 0px #00000047;
 }
 .Wallet .TopBar {
     display: flex;
@@ -28,4 +45,22 @@
 }
 .Wallet .TopBar input {
     width: 100%;
+}
+
+.ButtonOp {
+    position: absolute;
+    width: 145px;
+    height: 96px;
+    right: 0rem;
+    top: 9.5rem;
+
+    background: transparent;
+    border: none;
+    border-bottom-left-radius: 40px;
+    border-top-left-radius: 40px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #ffffff47;
+    }
 }

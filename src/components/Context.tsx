@@ -18,6 +18,7 @@ function Context() {
     const w: IWallet = {
       id: uuid(),
       name: "",
+      matiz: Math.floor(Math.random() * 360),
       registers: []
     };
 
@@ -34,6 +35,7 @@ function Context() {
             key={wallet.id}
             id={wallet.id}
             name={wallet.name}
+            matiz={wallet.matiz}
             period={period}
             contextPersistance={contextPersistance}
             updateWallets={() => setWallets(contextPersistance.getWallets() || [])}
