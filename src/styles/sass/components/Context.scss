@@ -4,14 +4,16 @@
     width: 100%;
     height: 96vh;
     margin: 0 auto;
-    max-width: 1200px;
+    max-width: 1280px;
 }
 .Wallets {
     display: flex;
     flex-direction: column;
     justify-content: start;
-    align-items: center;
+    align-items: baseline;
     overflow-y: auto;
+    padding: 1rem 2rem 0 2rem;
+    margin-bottom: 1rem;
 }
 .Wallets:has( .Op) .Cl {
     pointer-events: none;

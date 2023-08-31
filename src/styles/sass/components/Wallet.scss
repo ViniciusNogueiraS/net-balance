@@ -2,20 +2,21 @@
     display: flex;
     flex-direction: column;
     row-gap: 6px;
-    height: 40px;
-    position: relative;
-    padding: 3rem 2rem;
-    transition: all ease-in .5s;
-
-    &:not(.Op):hover {
-        margin-left: 2rem;
-        height: 162px;
-    }
-}
-.Wallet.Op {
-    z-index: 1000;
     height: 100%;
-    margin-bottom: 2rem;
+    position: relative;
+    padding: 1.8rem;
+    transition: all ease-in .2s;
+
+    &.Op {
+        z-index: 1000;
+        height: 100%;
+        margin-bottom: 2rem;
+        align-self: center;
+    }
+
+    &:not(.Op):not(:last-child):hover {
+        padding-bottom: 200px;
+    }
 }
 
 .BackgroundOp {
@@ -42,25 +43,68 @@
 .Wallet .TopBar {
     display: flex;
     min-width: 30rem;
+    column-gap: 12px;
+    justify-content: end;
 }
 .Wallet .TopBar input {
-    width: 100%;
+    width: 80%;
+    padding: 0 24px;
+    background-color: #ffffff25;
+    border: none;
+    border-radius: 40px;
+    font-family: 'circular';
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    outline: none;
+}
+.Wallet .TopBar input::placeholder {
+    color: #ffffff25;
+}
+.Wallet .TopBar .Remove,
+.Wallet .TopBar .Toggle {
+    background: none;
+    border: none;
+    font-size: 38px;
+    color: white;
+    padding: 0;
+    margin: 0;
+    border-radius: 40px;
+    width: 60px;
+    height: 60px;
+    outline: none;
+    cursor: pointer;
+    transition: all ease .2s;
+}
+.Wallet .TopBar .Remove:hover {
+    background-color: #ffffff25;
+}
+.Wallet .TopBar .Toggle {
+    width: 38px;
+    height: 38px;
+    font-size: 24px;
+    background-color: #0000002f;
+}
+.Wallet .TopBar .Toggle:hover {
+    background-color: #00000013;
 }
 
 .ButtonOp {
     position: absolute;
-    width: 145px;
+    padding: 0;
+    width: 140px;
     height: 96px;
     right: 0rem;
     top: 9.5rem;
 
     background: transparent;
     border: none;
-    border-bottom-left-radius: 40px;
-    border-top-left-radius: 40px;
+    border-bottom-left-radius: 60px;
+    border-top-left-radius: 60px;
+    transition: all ease .2s;
     cursor: pointer;
 
     &:hover {
-        background-color: #ffffff47;
+        background-color: #ffffff25;
     }
 }
