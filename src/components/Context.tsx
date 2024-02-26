@@ -63,7 +63,7 @@ function Context() {
         ))}
       </div>
       <button className="NewWallet" onClick={newWallet}>
-        Nova Carteira
+        Nova Carteira 👝
       </button>
     </div>
   );

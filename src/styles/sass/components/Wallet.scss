@@ -1,7 +1,6 @@
 .Wallet {
     display: flex;
     flex-direction: column;
-    row-gap: 6px;
     height: 100%;
     position: relative;
     padding: 1.8rem;
@@ -12,6 +11,7 @@
         height: 100%;
         margin-bottom: 2rem;
         align-self: center;
+        position: fixed;
     }
 
     &:not(.Op):not(:last-child):hover {
@@ -80,6 +80,7 @@
     background-color: #ffffff25;
 }
 .Wallet .TopBar .Toggle {
+    position: absolute;
     width: 38px;
     height: 38px;
     font-size: 24px;

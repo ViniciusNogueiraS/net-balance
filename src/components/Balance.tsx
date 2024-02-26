@@ -116,9 +116,9 @@ function Balance({period, walletId}: Props) {
 
   return (
     <div className="Balance">
-      <div>
-        <p>Saldo Anterior: {currencyBRL.format(prevBalance)}</p>
-      </div>
+      <p className="BalanceValue">Saldo Anterior: &nbsp;
+        <span style={{color: prevBalance < 0 ? '#444' : '#4279b3'}}>{currencyBRL.format(prevBalance)}</span>
+      </p>
       <div className="Table">
         <div className="TableHead">
           <div className="Row">
@@ -192,8 +192,8 @@ function Balance({period, walletId}: Props) {
                       />
                     </div>
                     <div className="Cell">
-                      <button disabled={parseFloat(editEntry.value) <= 0} onClick={() => addEntry(editEntry.id)}>OK</button>
-                      <button onClick={() => removeEntry(entry.id)}>Excluir</button>
+                      <button title="Confirmar" className="BtnOk" disabled={parseFloat(editEntry.value) <= 0} onClick={() => addEntry(editEntry.id)}>✔️</button>
+                      <button title="Excluir" className="BtnRemove" onClick={() => removeEntry(entry.id)}>❌</button>
                     </div>
                   </div>
                 )
@@ -220,7 +220,7 @@ function Balance({period, walletId}: Props) {
                     R$ {entry.value}
                   </div>
                   <div className="Cell">
-                    <button onClick={() => changeEntry(entry.id)}>Editar</button>
+                    <button title="Editar" className="BtnEdit" onClick={() => changeEntry(entry.id)}>✏️</button>
                   </div>
                 </div>
               )
@@ -233,9 +233,9 @@ function Balance({period, walletId}: Props) {
           </div>
         </div>
       </div>
-      <div>
-        <p>Saldo Atual: {currencyBRL.format(currBalance)}</p>
-      </div>
+      <p className="BalanceValue">Saldo Atual:&nbsp;
+        <span style={{color: currBalance < 0 ? '#444' : '#4279b3'}}>{currencyBRL.format(currBalance)}</span>
+      </p>
     </div>
   );
 }

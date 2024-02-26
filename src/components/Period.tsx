@@ -32,27 +32,27 @@ function Period({period, setPeriod}: Props) {
 
   return (
     <div className="Period">
-      <div>
-        <label>Periodo
+      <div style={{display: 'flex'}}>
+        <label className="Period1">Periodo
           <input
             type="radio"
             name="Period"
             onChange={() => setTogglePeriod("Period")}
             value="Period"/>
         </label>
-        <label>Hoje
+        <label className="Period2">Hoje
           <input
             type="radio"
             checked={togglePeriod === "Today"}
             name="Period" onChange={() => setTogglePeriod("Today")}
             value="Today"/>
         </label>
-      </div>
+      </div><br/>
 
-      <div>
+      <div className="PeriodSelect">
         {togglePeriod === "Period" ? (
           <>
-            <label>Início
+            <label>Início<br/>
               <DateTimePicker
                 onChange={(date: Date | null) => setPeriod({init: date, end: period?.end})}
                 value={period?.init}
@@ -61,8 +61,8 @@ function Period({period, setPeriod}: Props) {
                 clearIcon={null}
                 maxDate={period?.end}
               />
-            </label>
-            <label>Fim
+            </label><br/>
+            <label>Fim<br/>
               <DateTimePicker
                 onChange={(date: Date | null) => setPeriod({init: period?.init, end: date})}
                 value={period?.end}
