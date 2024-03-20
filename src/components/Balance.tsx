@@ -228,7 +228,7 @@ function Balance({period, walletId}: Props) {
           })}
           <div className="Row">
             <div className="Cell">
-              <button onClick={newEntry}>Novo Lançamento</button>
+              <button title="Adicionar Registro" onClick={newEntry} className="BtnAdd">➕</button>
             </div>
           </div>
         </div>
